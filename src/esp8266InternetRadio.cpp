@@ -114,8 +114,8 @@ void stopPlaying();
 void showCurrent();
 
 // Enter your WiFi ssid and password here:
-const char ssid[]      = "YOUR SSID";
-const char password[]  = "YOUR PSK";
+const char ssid[]      = "sasIoT";
+const char password[]  = "Sashi@1423#";
 uint8_t currentStation = 4; // preselect your favorite station
 const char *currentUrl = station[currentStation].url;
 int volume = 100;
