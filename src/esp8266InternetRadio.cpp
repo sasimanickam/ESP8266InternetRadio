@@ -101,7 +101,7 @@ Radiostation station[] =
   { "Klassik Radio", "http://stream.klassikradio.de/live/mp3-128/stream.klassikradio.de/" },
   { "DLF",           "http://st01.dlf.de/dlf/01/128/mp3/stream.mp3" },
   { "WDR",           "http://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3" },
-  { "SWR4",          "http://swr-swr4-bw.cast.addradio.de/swr/swr4/bw/mp3/128/stream.mp3}" },
+
 };
 constexpr uint8_t nbrRadiostations = sizeof(station) / sizeof(station[0]);
 
