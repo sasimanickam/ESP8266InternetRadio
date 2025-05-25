@@ -114,7 +114,7 @@ void stopPlaying();
 void showCurrent();
 
 // Enter your WiFi ssid and password here:
-const char ssid[]      = "sasIoT";
+const char ssid[]      = "sashi-ddwrt-2g";
 const char password[]  = "Sashi@1423#";
 uint8_t currentStation = 4; // preselect your favorite station
 const char *currentUrl = station[currentStation].url;
@@ -365,7 +365,6 @@ void initWiFi()
 
   // Try forever
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.printf_P(PSTR("DEBUG: WiFi status: %d\n"), WiFi.status());
     Serial.println("...Connecting to WiFi");
     delay(1000);
   }
