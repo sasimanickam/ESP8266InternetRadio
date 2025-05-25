@@ -114,8 +114,8 @@ void stopPlaying();
 void showCurrent();
 
 // Enter your WiFi ssid and password here:
-const char ssid[]      = "sashi-ddwrt-2g";
-const char password[]  = "Sashi@1423#";
+const char ssid[]      = "Sasi iPhone";
+const char password[]  = "Sashi7414";
 uint8_t currentStation = 4; // preselect your favorite station
 const char *currentUrl = station[currentStation].url;
 int volume = 100;
