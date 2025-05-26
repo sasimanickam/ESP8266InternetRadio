@@ -1,5 +1,5 @@
 
- /* Program      esp8266InternetRadio.cpp
+ * Program      esp8266InternetRadio.cpp
  * Author       2021-07-11 Charles Geiser (https://www.dodeka.ch)
  * 
  * History      2021-07-25 I received the long awaited DAC/amplifier 
@@ -73,9 +73,8 @@
  * References   https://github.com/earlephilhower
  *              https://www.hackster.io/earlephilhower/esp8266-digital-radio-ee747f
  */
-
 #include <Arduino.h>
-#include <WiFi.h>
+#include <ESP8266WiFi.h>
 #include <LittleFS.h>
 #include "AudioGeneratorMP3.h"
 #include "AudioFileSourceICYStream.h"
@@ -115,7 +114,7 @@ void stopPlaying();
 void showCurrent();
 
 // Enter your WiFi ssid and password here:
-const char ssid[]      = "";
+const char ssid[]      = "YOUR SSID";
 const char password[]  = "YOUR PSK";
 uint8_t currentStation = 4; // preselect your favorite station
 const char *currentUrl = station[currentStation].url;
