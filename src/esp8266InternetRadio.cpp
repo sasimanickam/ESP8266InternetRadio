@@ -75,14 +75,16 @@
  *              https://www.hackster.io/earlephilhower/esp8266-digital-radio-ee747f
  */
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <LittleFS.h>
 #include "AudioGeneratorMP3.h"
+#include "esp_task_wdt.h"
 #include "AudioFileSourceICYStream.h"
 #include "AudioFileSourceBuffer.h"
 #include "AudioOutputI2S.h"
 #include "AudioOutputI2SNoDAC.h"
 #include "PushButton.h"
+// #include "AudioGeneratorAAC.h" // Uncomment if you want to use AAC streams
 
 // #define EXTERNAL_DAC  // this line only if we use an external DAC
 #define pinButton 0
@@ -327,8 +329,8 @@ void initStream()
   Serial.println(F("DEBUG: initStream() starting"));
   file = new AudioFileSourceICYStream(station[currentStation].url);
   if (file == NULL) {
-    Serial.println(F("FATAL: new AudioFileSourceICYStream() failed!"));
-    while(true) { delay(1000); ESP.wdtFeed(); }
+    while(true) { delay(1000); esp_task_wdt_reset(); }
+    while(true) { delay(1000); yield(); }
   }
   Serial.println(F("DEBUG: AudioFileSourceICYStream object created."));
   //file = new AudioFileSourceHTTPStream(station[currentStation].url);
@@ -337,20 +339,20 @@ void initStream()
   buff = new AudioFileSourceBuffer(file, preallocateBuffer, preallocateBufferSize);
   if (buff == NULL) {
     Serial.println(F("FATAL: new AudioFileSourceBuffer() failed!"));
-    while(true) { delay(1000); ESP.wdtFeed(); }
+    while(true) { delay(1000); yield(); }
   }
   Serial.println(F("DEBUG: AudioFileSourceBuffer object created."));
   buff->RegisterStatusCB(cbStatus, (void *)"buffer");
-
-  decoder = new AudioGeneratorAAC(preallocateCodec, preallocateCodecSize);
+  decoder = new AudioGeneratorMP3(preallocateCodec, preallocateCodecSize);
   if (decoder == NULL) {
-    Serial.println(F("FATAL: new AudioGeneratorAAC() failed!"));
-    while(true) { delay(1000); ESP.wdtFeed(); }
+    Serial.println(F("FATAL: new AudioGeneratorMP3() failed!"));
+    while(true) { delay(1000); yield(); }
   }
-  Serial.println(F("DEBUG: AudioGeneratorAAC object created."));
-  decoder->RegisterStatusCB(cbStatus, (void *)"aac");
+  Serial.println(F("DEBUG: AudioGeneratorMP3 object created."));
+  decoder->RegisterStatusCB(cbStatus, (void *)"mp3");
   decoder->begin(buff, out);
   Serial.println(F("DEBUG: decoder->begin() called"));
+  Serial.println(F("DEBUG: initStream() completed"));
   Serial.println(F("DEBUG: initStream() completed"));
 }
 
@@ -386,16 +388,16 @@ void initAudio()
     out = new AudioOutputI2S();  // with external MAX98357 DAC/amplifier
     if (out == NULL) { 
       Serial.println(F("FATAL: new AudioOutputI2S object failed!")); 
-      while(true) { delay(1000); ESP.wdtFeed(); } 
+      while(true) { delay(1000); yield(); } 
     }
     Serial.println(F("DEBUG: AudioOutputI2S object created."));
   #else
-    out = new AudioOutputI2S(0, 1); // For internal DAC on ESP32
+    out = new AudioOutputI2SNoDAC(); // For internal DAC on ESP8266/ESP32
     if (out == NULL) { 
-      Serial.println(F("FATAL: new AudioOutputI2S object (internal DAC) failed!")); 
-      while(true) { delay(1000); ESP.wdtFeed(); } 
+      Serial.println(F("FATAL: new AudioOutputI2SNoDAC object (internal DAC) failed!")); 
+      while(true) { delay(1000); yield(); } 
     }
-    Serial.println(F("DEBUG: AudioOutputI2S object (internal DAC) created."));
+    Serial.println(F("DEBUG: AudioOutputI2SNoDAC object (internal DAC) created."));
   #endif
   Serial.println(F("DEBUG: initAudio_internal calling startPlaying()"));
   startPlaying();
@@ -413,7 +415,7 @@ void initBuffers()
   if (!preallocateBuffer || !preallocateCodec) 
   {
     Serial.printf_P(PSTR("FATAL ERROR:  Unable to preallocate %d bytes for app\n"), preallocateBufferSize+preallocateCodecSize);
-    while (true) { delay(1000); ESP.wdtFeed(); } // Infinite halt
+    while (true) { delay(1000); yield(); } // Infinite halt
   }
   Serial.println(F("DEBUG: initBuffers_internal completed"));
 }
@@ -427,7 +429,7 @@ void setup()
   Serial.println(F("DEBUG: Initializing LittleFS..."));
   if (!LittleFS.begin()) {
     Serial.println(F("FATAL: LittleFS.begin() failed!"));
-    while (true) { delay(1000); ESP.wdtFeed(); } // Halt with WDT feed
+    while (true) { delay(1000); yield(); } // Halt with WDT feed
   }
   Serial.println(F("DEBUG: LittleFS initialized successfully."));
 
