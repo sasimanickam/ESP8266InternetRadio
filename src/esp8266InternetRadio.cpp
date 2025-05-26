@@ -1,5 +1,5 @@
-/**
- * Program      esp8266InternetRadio.cpp
+
+ /* Program      esp8266InternetRadio.cpp
  * Author       2021-07-11 Charles Geiser (https://www.dodeka.ch)
  * 
  * History      2021-07-25 I received the long awaited DAC/amplifier 
@@ -73,6 +73,7 @@
  * References   https://github.com/earlephilhower
  *              https://www.hackster.io/earlephilhower/esp8266-digital-radio-ee747f
  */
+
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <LittleFS.h>
@@ -87,21 +88,21 @@
 #define pinButton 0
 
 typedef struct { const char *name; const char *url; } Radiostation;
- // { "SRF1 AG-SO",    "http://stream.srg-ssr.ch/m/regi_ag_so/mp3_128" }
-  // { "SRF2",          "http://stream.srg-ssr.ch/m/drs2/mp3_128" },
-  // { "SRF3",          "http://stream.srg-ssr.ch/m/drs3/mp3_128" },
-  // { "SRF4 NEWS",     "http://stream.srg-ssr.ch/m/drs4news/mp3_128" },
-  // { "SWISS CLASSIC", "http://stream.srg-ssr.ch/m/rsc_de/mp3_128" },
-  // { "SWISS JAZZ",    "http://stream.srg-ssr.ch/m/rsj/mp3_128" },
-  // { "MUSIKWELLE",    "http://stream.srg-ssr.ch/m/drsmw/mp3_128" },
-  // { "BLASMUSIK",     "http://stream.bayerwaldradio.com/allesblasmusik" },
-  // { "KVB",           "http://kvbstreams.dyndns.org:8000/wkvi-am" },
-  // { "Klassik Radio", "http://stream.klassikradio.de/live/mp3-128/stream.klassikradio.de/" },
-  // { "DLF",           "http://st01.dlf.de/dlf/01/128/mp3/stream.mp3" },
-  // { "WDR",           "http://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3" },
 Radiostation station[] =
 {
-  {"AAC", "https://audio-edge-qse4n.yyz.g.radiomast.io/ref-64k-heaacv2-stereo"},
+  { "SRF1 AG-SO",    "http://stream.srg-ssr.ch/m/regi_ag_so/mp3_128" },
+  { "SRF2",          "http://stream.srg-ssr.ch/m/drs2/mp3_128" },
+  { "SRF3",          "http://stream.srg-ssr.ch/m/drs3/mp3_128" },
+  { "SRF4 NEWS",     "http://stream.srg-ssr.ch/m/drs4news/mp3_128" },
+  { "SWISS CLASSIC", "http://stream.srg-ssr.ch/m/rsc_de/mp3_128" },
+  { "SWISS JAZZ",    "http://stream.srg-ssr.ch/m/rsj/mp3_128" },
+  { "MUSIKWELLE",    "http://stream.srg-ssr.ch/m/drsmw/mp3_128" },
+  { "BLASMUSIK",     "http://stream.bayerwaldradio.com/allesblasmusik" },
+  { "KVB",           "http://kvbstreams.dyndns.org:8000/wkvi-am" },
+  { "Klassik Radio", "http://stream.klassikradio.de/live/mp3-128/stream.klassikradio.de/" },
+  { "DLF",           "http://st01.dlf.de/dlf/01/128/mp3/stream.mp3" },
+  { "WDR",           "http://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3" },
+  { "SWR4",          "http://swr-swr4-bw.cast.addradio.de/swr/swr4/bw/mp3/128/stream.mp3}" },
 };
 constexpr uint8_t nbrRadiostations = sizeof(station) / sizeof(station[0]);
 
@@ -114,8 +115,8 @@ void stopPlaying();
 void showCurrent();
 
 // Enter your WiFi ssid and password here:
-const char ssid[]      = "Sasi iPhone";
-const char password[]  = "Sashi7414";
+const char ssid[]      = "YOUR SSID";
+const char password[]  = "YOUR PSK";
 uint8_t currentStation = 4; // preselect your favorite station
 const char *currentUrl = station[currentStation].url;
 int volume = 100;
@@ -365,6 +366,7 @@ void initWiFi()
 
   // Try forever
   while (WiFi.status() != WL_CONNECTED) {
+    Serial.printf_P(PSTR("DEBUG: WiFi status: %d\n"), WiFi.status());
     Serial.println("...Connecting to WiFi");
     delay(1000);
   }
