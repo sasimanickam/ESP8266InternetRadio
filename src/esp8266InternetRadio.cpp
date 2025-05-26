@@ -75,7 +75,7 @@
  */
 
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <LittleFS.h>
 #include "AudioGeneratorMP3.h"
 #include "AudioFileSourceICYStream.h"
